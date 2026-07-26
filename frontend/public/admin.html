@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Dashboard — Vaishnavi Goyal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/admin.css"/>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-name">VG<span>.</span> Admin</div>
+    <div class="brand-sub">Portfolio Dashboard</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item active" onclick="showPage('overview',this)"><span class="nav-icon">⬛</span> Dashboard <span class="nav-badge" id="badgeOverview">Live</span></div>
+    <div class="nav-item" onclick="showPage('messages',this)"><span class="nav-icon">✉</span> Messages <span class="nav-badge" id="badgeMessages">3</span></div>
+    <div class="nav-section-label" style="margin-top:1rem">Content</div>
+    <div class="nav-item" onclick="showPage('projects',this)"><span class="nav-icon">🗂</span> Projects <span class="nav-badge" id="badgeProjects">…</span></div>
+    <div class="nav-item" onclick="showPage('ideas',this)"><span class="nav-icon">💡</span> Ideas <span class="nav-badge" id="badgeIdeas">…</span></div>
+    <div class="nav-section-label" style="margin-top:1rem">Site</div>
+    <div class="nav-item" onclick="showPage('settings',this)"><span class="nav-icon">⚙</span> Settings</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="user-avatar">VG</div>
+      <div><div class="user-name">Vaishnavi Goyal</div><div class="user-role">Admin</div></div>
+    </div>
+    <div class="sidebar-actions">
+      <a href="/" class="sidebar-link">↗ View live site</a>
+      <button class="sidebar-link danger" onclick="logout()">⎋ Sign out</button>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    <div class="topbar-right">
+      <span class="topbar-stat">Projects: <strong id="statProjects">…</strong></span>
+      <span class="topbar-stat">Ideas: <strong id="statIdeas">…</strong></span>
+      <span class="topbar-stat">Messages: <strong id="statMessages">3</strong></span>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="page active" id="page-overview">
+    <div class="metrics">
+      <div class="metric-card"><div class="metric-label">Total Projects</div><div class="metric-val green" id="m-projects">…</div><div class="metric-sub">↑ 1 this month</div></div>
+      <div class="metric-card"><div class="metric-label">Idea Lab Entries</div><div class="metric-val purple" id="m-ideas">…</div><div class="metric-sub">3 open to collaborate</div></div>
+      <div class="metric-card"><div class="metric-label">Unread Messages</div><div class="metric-val pink" id="m-messages">3</div><div class="metric-sub">2 collab requests</div></div>
+      <div class="metric-card"><div class="metric-label">Profile Views</div><div class="metric-val white">2.4k</div><div class="metric-sub">↑ 18% this week</div></div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">Portfolio visits — last 7 days</div>
+        <div class="bar-chart">
+          <div class="bar" style="height:40%"><span class="bar-label">Mon</span></div>
+          <div class="bar" style="height:65%"><span class="bar-label">Tue</span></div>
+          <div class="bar" style="height:50%"><span class="bar-label">Wed</span></div>
+          <div class="bar" style="height:80%;background:rgba(200,240,96,0.3);border-color:rgba(200,240,96,0.4)"><span class="bar-label">Thu</span></div>
+          <div class="bar" style="height:72%"><span class="bar-label">Fri</span></div>
+          <div class="bar" style="height:55%"><span class="bar-label">Sat</span></div>
+          <div class="bar" style="height:45%"><span class="bar-label">Sun</span></div>
+        </div>
+        <div style="margin-top:2rem;font-size:0.72rem;color:var(--muted)">Peak day: Thursday · 340 views</div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Traffic by section</div>
+        <div class="donut-wrap">
+          <div class="donut-row"><div class="donut-color" style="background:var(--accent)"></div><div class="donut-label">Projects</div><div class="donut-bar"><div class="donut-fill" style="width:62%;background:var(--accent)"></div></div><div class="donut-val">62%</div></div>
+          <div class="donut-row"><div class="donut-color" style="background:var(--accent2)"></div><div class="donut-label">About</div><div class="donut-bar"><div class="donut-fill" style="width:21%;background:var(--accent2)"></div></div><div class="donut-val">21%</div></div>
+          <div class="donut-row"><div class="donut-color" style="background:var(--accent3)"></div><div class="donut-label">Ideas</div><div class="donut-bar"><div class="donut-fill" style="width:12%;background:var(--accent3)"></div></div><div class="donut-val">12%</div></div>
+          <div class="donut-row"><div class="donut-color" style="background:var(--muted)"></div><div class="donut-label">Contact</div><div class="donut-bar"><div class="donut-fill" style="width:5%;background:var(--muted)"></div></div><div class="donut-val">5%</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-header"><div class="section-title">Recent activity</div></div>
+    <div class="table-wrap">
+      <div class="activity-list" id="activityList">
+        <div class="activity-item"><div class="activity-dot dot-pink"></div><div class="activity-text"><strong>New message</strong> from Priya Sharma — collaboration on GreenHabit idea</div><div class="activity-time">2h ago</div></div>
+        <div class="activity-item"><div class="activity-dot dot-green"></div><div class="activity-text"><strong>Project added</strong> — Melodia Music App successfully published</div><div class="activity-time">1d ago</div></div>
+        <div class="activity-item"><div class="activity-dot dot-purple"></div><div class="activity-text"><strong>New message</strong> from Rohan Mehta — job opportunity at Razorpay</div><div class="activity-time">2d ago</div></div>
+        <div class="activity-item"><div class="activity-dot dot-green"></div><div class="activity-text"><strong>Idea updated</strong> — Focus OS status changed to "Open to collaborate"</div><div class="activity-time">3d ago</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="page" id="page-projects">
+    <div class="section-header">
+      <div class="section-title">All Projects</div>
+      <button class="btn-add" onclick="openProjectModal()">+ Add project</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Project</th><th>Category</th><th>Tools</th><th>Featured</th><th>Actions</th></tr></thead>
+        <tbody id="projectsTableBody"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- IDEAS -->
+  <div class="page" id="page-ideas">
+    <div class="section-header">
+      <div class="section-title">Idea Lab</div>
+      <button class="btn-add" onclick="openIdeaModal()">+ Add idea</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Idea</th><th>Status</th><th>Theme</th><th>Actions</th></tr></thead>
+        <tbody id="ideasTableBody"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MESSAGES -->
+  <div class="page" id="page-messages">
+    <div class="section-header"><div class="section-title">Inbox</div></div>
+    <div id="messagesContainer">
+      <div class="message-card"><div class="msg-avatar" style="background:rgba(123,110,246,0.2);color:var(--accent2)">PS</div><div class="msg-content"><div class="msg-name">Priya Sharma</div><div class="msg-email">priya@design.co · Collaboration</div><div class="msg-body">Hi Vaishnavi! I came across your GreenHabit idea and I'd love to collaborate. I'm a full-stack dev with a sustainability background.</div></div><div class="msg-time">2h ago</div></div>
+      <div class="message-card"><div class="msg-avatar" style="background:rgba(200,240,96,0.12);color:var(--accent)">RM</div><div class="msg-content"><div class="msg-name">Rohan Mehta</div><div class="msg-email">rohan@razorpay.com · Job opportunity</div><div class="msg-body">We're hiring UI/UX designers at Razorpay. Your HealthTrack case study is exactly the systems thinking we look for.</div></div><div class="msg-time">2d ago</div></div>
+      <div class="message-card"><div class="msg-avatar" style="background:rgba(240,96,144,0.12);color:var(--accent3)">AK</div><div class="msg-content"><div class="msg-name">Aarav Kumar</div><div class="msg-email">aarav@student.bits.ac.in · Feedback</div><div class="msg-body">Your portfolio is incredibly inspiring. The process section especially helped me understand how real designers think. Thank you!</div></div><div class="msg-time">4d ago</div></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="page" id="page-settings">
+    <div class="section-header"><div class="section-title">Site settings</div></div>
+    <div class="table-wrap" style="padding:1.5rem">
+      <div class="form-field"><label>Display name</label><input type="text" value="Vaishnavi Goyal"/></div>
+      <div class="form-row2">
+        <div class="form-field"><label>Role / tagline</label><input type="text" value="UI/UX Designer"/></div>
+        <div class="form-field"><label>Location</label><input type="text" value="Bengaluru, India"/></div>
+      </div>
+      <div class="form-field"><label>Contact email</label><input type="email" value="vaishnavi13213@gmail.com"/></div>
+      <div class="form-field"><label>Availability</label>
+        <select><option>Open to opportunities</option><option>Freelance only</option><option>Not available</option></select>
+      </div>
+      <div style="display:flex;gap:0.75rem;margin-top:0.5rem">
+        <button class="btn-add" onclick="saveSettings()">Save changes</button>
+        <button class="btn-cancel" style="padding:0.6rem 1.2rem;cursor:pointer;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:var(--fb)">Discard</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ADD/EDIT PROJECT MODAL -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal">
+    <div class="modal-title" id="projectModalTitle">Add new project</div>
+    <button class="modal-close" onclick="closeModal('projectModal')">✕</button>
+    <div class="form-field"><label>Project title</label><input type="text" id="pTitle" placeholder="HealthTrack — Wellness App Redesign"/></div>
+    <div class="form-field"><label>Short description</label><textarea id="pDesc" rows="3" placeholder="Brief summary of the project and your role…"></textarea></div>
+    <div class="form-row2">
+      <div class="form-field"><label>Category</label>
+        <select id="pCat"><option value="app">App Design</option><option value="web">Web Design</option><option value="system">Design System</option></select>
+      </div>
+      <div class="form-field"><label>Thumbnail colour</label>
+        <select id="pColor"><option value="purple">Purple</option><option value="teal">Teal</option><option value="coral">Coral</option><option value="pink">Pink</option><option value="amber">Amber</option><option value="blue">Blue</option></select>
+      </div>
+    </div>
+    <div class="form-field"><label>Emoji icon</label><input type="text" id="pEmoji" placeholder="🎨" maxlength="4"/></div>
+    <div class="form-field"><label>Tools used (comma separated)</label><input type="text" id="pTools" placeholder="Figma, Maze, Protopie"/></div>
+    <div class="form-field"><label>Case study URL (optional)</label><input type="text" id="pUrl" placeholder="https://notion.so/…"/></div>
+    <div class="form-field" style="flex-direction:row;align-items:center;gap:0.75rem">
+      <input type="checkbox" id="pFeatured" style="width:16px;height:16px;accent-color:var(--accent)"/>
+      <label for="pFeatured" style="font-size:0.85rem;color:var(--text)">Mark as featured project</label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('projectModal')">Cancel</button>
+      <button class="btn-submit" onclick="saveProject()">Save project</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD/EDIT IDEA MODAL -->
+<div class="modal-overlay" id="ideaModal">
+  <div class="modal">
+    <div class="modal-title" id="ideaModalTitle">Add new idea</div>
+    <button class="modal-close" onclick="closeModal('ideaModal')">✕</button>
+    <div class="form-field"><label>Idea title</label><input type="text" id="iTitle" placeholder="Focus OS — distraction-free workspace"/></div>
+    <div class="form-field"><label>Description</label><textarea id="iDesc" rows="3" placeholder="What is the idea and why does it matter?"></textarea></div>
+    <div class="form-row2">
+      <div class="form-field"><label>Status</label>
+        <select id="iStatus"><option value="open">Open to collaborate</option><option value="planning">Planning phase</option><option value="research">In research</option></select>
+      </div>
+      <div class="form-field"><label>Theme colour</label>
+        <select id="iTheme"><option value="purple">Purple</option><option value="green">Green</option><option value="pink">Pink</option></select>
+      </div>
+    </div>
+    <div class="form-field"><label>Icon emoji</label><input type="text" id="iEmoji" placeholder="🧠" maxlength="4"/></div>
+    <div class="form-field"><label>Looking for (optional)</label><input type="text" id="iLooking" placeholder="Developer, Researcher, Domain expert…"/></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('ideaModal')">Cancel</button>
+      <button class="btn-submit" onclick="saveIdea()">Save idea</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-title" style="color:var(--danger)">Delete this item?</div>
+    <button class="modal-close" onclick="closeModal('deleteModal')">✕</button>
+    <p style="color:var(--muted);font-size:0.875rem;line-height:1.6" id="deleteMsg">This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
+      <button class="btn-submit btn-del" onclick="confirmDelete()">Yes, delete</button>
+    </div>
+  </div>
+</div>
+
+<div id="adminToast"></div>
+<script src="/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+node_modules/
+.env
+backend/.env
+backend/data/portfolio.db
+backend/data/portfolio.db-shm
+backend/data/portfolio.db-wal
+dist/
+build/
+*.log
+.DS_Store
+.vscode/
