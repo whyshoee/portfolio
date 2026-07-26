@@ -60,7 +60,7 @@ function buildProjectCard(p, index) {
   const [c1, c2] = (COLOR_MAP[p.color] || COLOR_MAP.purple).split(',');
   const isFeatured = p.featured && index === 0;
   const tools = p.tools ? p.tools.split(',').map(t => `<span class="tech-badge">${t.trim()}</span>`).join('') : '';
-  const catLabel = { app: 'App Design', web: 'Web Design', system: 'Design System' }[p.cat] || p.cat;
+  const catLabel = { app: 'Security & ML', web: 'Web', system: 'Systems' }[p.cat] || p.cat;
   const tag = isFeatured ? `Featured · ${catLabel}` : catLabel;
 
   return `
@@ -128,7 +128,7 @@ function buildIdeaCard(idea, i) {
     <div class="idea-card ${themeClass} reveal ${delay}">
       <div class="idea-icon">${idea.emoji}</div>
       <h4>${idea.title}</h4>
-      <p>${idea.desc}</p>
+      <p>${idea.description || ''}</p>
       <span class="idea-status ${statusClass}">${statusLabel}</span>
     </div>`;
 }
