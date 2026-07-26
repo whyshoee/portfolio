@@ -64,26 +64,8 @@ const PROJECTS = [
   }
 ];
 
-const IDEAS = [
-  {
-    title: 'Adversarial robustness benchmark for open models',
-    description: 'A reproducible benchmark that scores publicly available models against a standard battery of adversarial attacks, so robustness can be compared as easily as accuracy.',
-    status: 'planning', theme: 'purple', emoji: '🧪',
-    looking: 'ML engineers, security researchers'
-  },
-  {
-    title: 'Fuzzing harness for student projects',
-    description: 'Most coursework code is never fuzz-tested. A drop-in harness that generates edge-case inputs for common assignment patterns could catch a surprising number of bugs before submission.',
-    status: 'open', theme: 'green', emoji: '🐛',
-    looking: 'Systems and testing enthusiasts'
-  },
-  {
-    title: 'Kernel-level observability for containers',
-    description: 'Building on my container runtime work — a lightweight tracer that surfaces what a container is really doing at the syscall level, aimed at learners rather than production ops teams.',
-    status: 'research', theme: 'pink', emoji: '🔬',
-    looking: 'Linux systems developers'
-  }
-];
+// Ideas are added by you from the admin panel — nothing is seeded here.
+const IDEAS = [];
 
 async function seed() {
   await initDb();
