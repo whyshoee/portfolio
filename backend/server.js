@@ -54,6 +54,10 @@ app.use(cookieParser());
 // Serve static frontend assets if you want Express to handle them
 app.use(express.static('frontend'));
 
+// Lightweight health check — used by uptime pingers to keep the
+// free Render instance awake without pulling the whole homepage.
+app.get('/health', (req, res) => res.type('text').send('ok'));
+
 // 3. API Routes
 // API Routes
 app.use('/api/auth', authRoutes);
