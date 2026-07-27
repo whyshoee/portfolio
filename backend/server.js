@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 
 import { initDb } from './config/db.js';
+import { runSeed } from './data/seedData.js';
 // We will create these routes in the next steps
 import authRoutes from './routes/authRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
@@ -76,6 +77,15 @@ app.use((err, req, res, next) => {
 async function startServer() {
   try {
     await initDb();
+
+    // Seed on boot. Guarded internally, so it never overwrites your edits.
+    // Wrapped so a seeding problem can never stop the site from serving.
+    try {
+      await runSeed();
+    } catch (seedErr) {
+      console.error('⚠️  Seeding skipped due to error:', seedErr.message);
+    }
+
     app.listen(PORT, () => {
       console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
     });

@@ -1,107 +1,21 @@
 // backend/data/seed.js
-// Seeds the admin user plus an initial set of projects and ideas.
-// Safe to run repeatedly: each section is skipped if data already exists,
-// so anything you add or delete in the admin panel is never overwritten.
+// Manual seed runner: `npm run seed`
+// The same logic also runs automatically when the server boots (see server.js),
+// so this script is only needed for local/manual use.
 
-import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import { UserModel } from '../models/User.js';
-import { ProjectModel } from '../models/Project.js';
-import { IdeaModel } from '../models/Idea.js';
 import { initDb } from '../config/db.js';
+import { runSeed } from './seedData.js';
 
 dotenv.config();
 
-const PROJECTS = [
-  {
-    title: 'Adversarial ML Security Framework',
-    desc: 'An end-to-end security lifecycle engine for adversarial stress testing of financial AI models. Implements white-box attack vectors (FGSM, PGD) against XGBoost, DistilBERT and ResNet to expose vulnerabilities in high-stakes transaction logic, paired with an automated defensive pipeline and an immutable telemetry audit trail.',
-    cat: 'app', color: 'purple', emoji: '🛡️',
-    tools: 'Python, XGBoost, DistilBERT, PyTorch, SQLModel',
-    url: '', featured: 1
-  },
-  {
-    title: 'Lightweight Container Runtime & Kernel Monitor',
-    desc: 'A mini-Docker container runtime written from scratch in C, using UNIX socket IPC and custom Linux kernel modules to monitor memory usage and process synchronisation at the OS level.',
-    cat: 'system', color: 'teal', emoji: '⚙️',
-    tools: 'C, Linux Kernel Modules, UNIX Sockets, Multithreading',
-    url: '', featured: 0
-  },
-  {
-    title: 'JavaScript Syntax Validator',
-    desc: 'A compiler-design project: a validation tool built in Node.js using lexical analysis, recursive descent parsing and context-free grammars to verify JavaScript syntax from first principles.',
-    cat: 'system', color: 'blue', emoji: '🔤',
-    tools: 'Node.js, Lexical Analysis, CFG, Recursive Descent',
-    url: '', featured: 0
-  },
-  {
-    title: 'Advanced Port Scanner',
-    desc: 'A custom network auditing tool for service detection, built on socket-level communication and protocol analysis to identify infrastructure exposure and surface potential security risks.',
-    cat: 'app', color: 'coral', emoji: '🔍',
-    tools: 'Python, Sockets, Networking, Protocol Analysis',
-    url: '', featured: 0
-  },
-  {
-    title: 'House Sales Data Analysis',
-    desc: 'Exploratory data analysis and predictive regression modelling over large-scale housing datasets, building a data-driven quality assessment framework to validate model accuracy and predict price variance.',
-    cat: 'app', color: 'amber', emoji: '📊',
-    tools: 'Python, Pandas, NumPy, Matplotlib, Statsmodels',
-    url: '', featured: 0
-  },
-  {
-    title: 'Intelligent Waste Segregation System',
-    desc: 'An embedded real-time classification system using sensor fusion (ultrasonic, IR, moisture) and servo-control logic to sort waste automatically — hardware and software integrated for real-time decision making.',
-    cat: 'system', color: 'pink', emoji: '♻️',
-    tools: 'Embedded C, Sensor Fusion, Servo Control',
-    url: '', featured: 0
-  },
-  {
-    title: 'Full-Stack Auction & E-Commerce Platform',
-    desc: 'Scalable web platforms featuring secure user authentication, transactional bidding logic and responsive interfaces — covering the full stack from database schema through to front-end performance.',
-    cat: 'web', color: 'purple', emoji: '🛒',
-    tools: 'Node.js, Express, SQL, REST APIs, HTML/CSS',
-    url: '', featured: 0
+(async () => {
+  try {
+    await initDb();
+    await runSeed();
+    process.exit(0);
+  } catch (err) {
+    console.error('❌ Seed failed:', err);
+    process.exit(1);
   }
-];
-
-// Ideas are added by you from the admin panel — nothing is seeded here.
-const IDEAS = [];
-
-async function seed() {
-  await initDb();
-
-  // ── Admin user ──────────────────────────────────────────────
-  const username = process.env.ADMIN_USERNAME || 'vaishnavi';
-  const plainPassword = process.env.ADMIN_PASSWORD || 'yourpassword123';
-
-  if (!(await UserModel.exists())) {
-    const hash = await bcrypt.hash(plainPassword, 10);
-    await UserModel.create(username, hash);
-    console.log(`🚀 Admin profile seeded for user: ${username}`);
-  } else {
-    console.log('💡 Admin user already exists — skipping.');
-  }
-
-  // ── Projects ────────────────────────────────────────────────
-  if ((await ProjectModel.count()) === 0) {
-    for (const p of PROJECTS) await ProjectModel.create(p);
-    console.log(`📦 Seeded ${PROJECTS.length} projects.`);
-  } else {
-    console.log('💡 Projects already present — skipping.');
-  }
-
-  // ── Ideas ───────────────────────────────────────────────────
-  if ((await IdeaModel.count()) === 0) {
-    for (const i of IDEAS) await IdeaModel.create(i);
-    console.log(`💡 Seeded ${IDEAS.length} ideas.`);
-  } else {
-    console.log('💡 Ideas already present — skipping.');
-  }
-
-  process.exit(0);
-}
-
-seed().catch((err) => {
-  console.error('❌ Seed failed:', err);
-  process.exit(1);
-});
+})();
