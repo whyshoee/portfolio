@@ -48,7 +48,7 @@ window.filterProjects = filterProjects;
 // ── Toast ────────────────────────────────────────────────────
 function showToast(msg, type = 'success') {
   const t = document.getElementById('toast');
-  t.textContent = (type === 'success' ? '✓ ' : '✕ ') + msg;
+  t.textContent = msg;
   t.className = type === 'error' ? 'error show' : 'show';
   setTimeout(() => t.className = '', 3500);
 }
