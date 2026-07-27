@@ -65,8 +65,16 @@ const PROJECTS = [
   }
 ];
 
-// Ideas are added by you from the admin panel — nothing is created here.
-const IDEAS = [];
+// Ideas for the Idea Lab. Only created if the ideas table is empty,
+// so anything you add or delete in the admin panel is never touched.
+const IDEAS = [
+  {
+    title: 'Patterned — dark pattern detector',
+    description: 'A browser extension that flags manipulative design as you browse: fake urgency timers, pre-ticked opt-ins, hidden checkout costs, and decline buttons deliberately made harder to find than accept ones. It names the trick and explains what it is doing to you.',
+    status: 'planning', theme: 'purple', emoji: '🕵️',
+    looking: 'Frontend developers, UX researchers'
+  }
+];
 
 export async function runSeed() {
   const username = process.env.ADMIN_USERNAME || 'vaishnavi';
