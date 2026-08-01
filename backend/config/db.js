@@ -108,5 +108,14 @@ export async function initDb() {
     )
   `);
 
+  // Tracks which starter items have already been inserted, so anything
+  // you delete in the admin panel stays deleted across restarts.
+  await dbRun(`
+    CREATE TABLE IF NOT EXISTS seed_log (
+      key        TEXT PRIMARY KEY,
+      applied_at TEXT NOT NULL DEFAULT (datetime('now'))
+    )
+  `);
+
   console.log('✅  Database schema ready');
 }

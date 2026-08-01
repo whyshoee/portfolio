@@ -9,6 +9,7 @@ import bcrypt from 'bcryptjs';
 import { UserModel } from '../models/User.js';
 import { ProjectModel } from '../models/Project.js';
 import { IdeaModel } from '../models/Idea.js';
+import { dbGet, dbRun } from '../config/db.js';
 
 // Starter projects, taken from Vaishnavi's resume.
 // These are only created if the projects table is completely empty, so
@@ -69,12 +70,52 @@ const PROJECTS = [
 // so anything you add or delete in the admin panel is never touched.
 const IDEAS = [
   {
+    title: 'WakeStop — transit alarm that wakes you at your stop',
+    description: 'A Flutter app that tracks your journey by GPS and wakes you just before your stop, so you can sleep on the bus or metro without missing it. Imports any city\'s official GTFS timetable for real routes and hop times, and includes an opt-in safety layer: trip sharing with trusted contacts, an SOS button, and automatic detection of route deviations or unusual long stops.',
+    status: 'planning', theme: 'green', emoji: '🚌',
+    looking: 'Flutter developers, testers who commute daily'
+  },
+  {
+    title: 'A DSA tutor that makes you write every line',
+    description: 'Most tools convert your pseudocode into working code, which removes the actual learning. This runs the opposite way: you get a code-shaped English scaffold with the structure already in place, then replace each line with real syntax yourself. Pick your level and your language — Python, C or Java — and the scaffold reshapes to match, with per-line feedback on what you wrote.',
+    status: 'research', theme: 'pink', emoji: '🧩',
+    looking: 'Educators, beginner programmers to test with'
+  },
+  {
     title: 'Patterned — dark pattern detector',
     description: 'A browser extension that flags manipulative design as you browse: fake urgency timers, pre-ticked opt-ins, hidden checkout costs, and decline buttons deliberately made harder to find than accept ones. It names the trick and explains what it is doing to you.',
     status: 'planning', theme: 'purple', emoji: '🕵️',
     looking: 'Frontend developers, UX researchers'
   }
 ];
+
+// Each starter item is inserted at most ONCE, ever. We record its key in
+// the seed_log table the first time it is handled, so if you later delete
+// it from the admin panel it will never come back.
+async function seedOnce(kind, items, Model) {
+  if (!items.length) return;
+
+  const existingTitles = new Set((await Model.findAll()).map((r) => r.title));
+  let inserted = 0;
+
+  for (const item of items) {
+    const key = `${kind}:${item.title}`;
+
+    const done = await dbGet('SELECT key FROM seed_log WHERE key = ?', [key]);
+    if (done) continue; // already handled once — respect any later deletion
+
+    // Already in the database (e.g. seeded before seed_log existed):
+    // record it so we never touch it again, but don't duplicate it.
+    if (!existingTitles.has(item.title)) {
+      await Model.create(item);
+      inserted++;
+    }
+
+    await dbRun('INSERT OR IGNORE INTO seed_log (key) VALUES (?)', [key]);
+  }
+
+  if (inserted) console.log(`📦 Added ${inserted} new ${kind}(s).`);
+}
 
 export async function runSeed() {
   const username = process.env.ADMIN_USERNAME || 'vaishnavi';
@@ -88,13 +129,6 @@ export async function runSeed() {
     console.log('💡 Admin user already exists — skipping.');
   }
 
-  if (PROJECTS.length && Number(await ProjectModel.count()) === 0) {
-    for (const p of PROJECTS) await ProjectModel.create(p);
-    console.log(`📦 Seeded ${PROJECTS.length} projects.`);
-  }
-
-  if (IDEAS.length && Number(await IdeaModel.count()) === 0) {
-    for (const i of IDEAS) await IdeaModel.create(i);
-    console.log(`💡 Seeded ${IDEAS.length} ideas.`);
-  }
+  await seedOnce('project', PROJECTS, ProjectModel);
+  await seedOnce('idea', IDEAS, IdeaModel);
 }
