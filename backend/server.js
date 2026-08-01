@@ -69,7 +69,15 @@ app.use('/api/contact', MessageController.create); // Public inbound pipeline su
 // Serve static client layout pages beautifully
 app.get('/login', (req, res) => res.sendFile(path.resolve('frontend/public/login.html')));
 app.get('/admin', (req, res) => res.sendFile(path.resolve('frontend/public/admin.html')));
-app.get('*', (req, res) => res.sendFile(path.resolve('frontend/public/index.html')));
+// Anything that looks like a file (.pdf, .png, .css …) but wasn't found by
+// express.static is a genuine 404. Without this it would fall through and
+// return index.html, so a broken asset link silently downloads the homepage.
+app.get('*', (req, res) => {
+  if (path.extname(req.path)) {
+    return res.status(404).type('text').send('Not found');
+  }
+  res.sendFile(path.resolve('frontend/public/index.html'));
+});
 
 // Global Error Handler
 app.use((err, req, res, next) => {
